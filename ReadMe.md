@@ -54,17 +54,17 @@ bpftool feature probe | grep program_type
 [kernel code](https://elixir.bootlin.com/linux/v5.13/source/include/uapi/linux/bpf.h#L828)
 
 /JamesYYang/learn-libbpfgo/raw/master/doc/most-use-command.PNG
-![](/JamesYYang/learn-libbpfgo/raw/master/doc/most-use-command.PNG)
+![](doc/most-use-command.PNG)
 
 
 ## bpf helper function
 
 [kernel code](https://elixir.bootlin.com/linux/v5.13/source/include/uapi/linux/bpf.h#L1463)
 
-![](/JamesYYang/learn-libbpfgo/raw/master/doc/most-use-func.PNG)
+![](doc/most-use-func.PNG)
 
 ## bpf map 
 
 [kernel code](https://elixir.bootlin.com/linux/v5.13/source/include/uapi/linux/bpf.h#L867)
 
-![](/JamesYYang/learn-libbpfgo/raw/master/doc/most-use-map.PNG)
+![](doc/most-use-map.PNG)
