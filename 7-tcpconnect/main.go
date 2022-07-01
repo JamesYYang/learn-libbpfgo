@@ -7,6 +7,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"os/signal"
 
@@ -89,10 +90,20 @@ func main() {
 				log.Println(err)
 				continue
 			}
-			log.Printf("SourceIP: [%d] DstIP: [%d] -- Family: %d \n", cd.SourceIP, cd.DstIP, cd.Family)
+			log.Printf("Source: [%s:%d] Dst: [%s:%d] -- Family: %d \n", inet_ntoa(cd.SourceIP), cd.SourcePort, inet_ntoa(cd.DstIP), cd.DstPort, cd.Family)
 		case <-c:
 			log.Fatal("program interrupted")
 			break
 		}
 	}
+}
+
+func inet_ntoa(ipnr uint32) string {
+	var bytes [4]byte
+	bytes[0] = byte(ipnr & 0xFF)
+	bytes[1] = byte((ipnr >> 8) & 0xFF)
+	bytes[2] = byte((ipnr >> 16) & 0xFF)
+	bytes[3] = byte((ipnr >> 24) & 0xFF)
+
+	return net.IPv4(bytes[0], bytes[1], bytes[2], bytes[3]).String()
 }

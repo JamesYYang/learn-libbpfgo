@@ -35,11 +35,12 @@ int kb_tcp_connect(struct pt_regs *ctx)
 		return 0;
 	}
 
+
 	struct sock_common sk_common = READ_KERN(sk->__sk_common);
 	event->dip = READ_KERN(sk_common.skc_daddr);
 	event->sip = READ_KERN(sk_common.skc_rcv_saddr);
-	event->sport = bpf_ntohs(READ_KERN(sk_common.skc_num));
-	event->dport = READ_KERN(sk_common.skc_dport);
+	event->sport = READ_KERN(sk_common.skc_num);
+	event->dport = bpf_ntohs(READ_KERN(sk_common.skc_dport));
 	event->family = READ_KERN(sk_common.skc_family);
 	
 	bpf_ringbuf_submit(event, 0);
