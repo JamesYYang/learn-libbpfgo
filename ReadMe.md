@@ -37,6 +37,9 @@ sudo bpftrace -l '*execve*'
 # 查询execve入口参数格式
 $ sudo bpftrace -lv tracepoint:syscalls:sys_enter_execve
 
+# 或者
+$ sudo cat /sys/kernel/debug/tracing/events/syscalls/sys_enter_execve/format
+
 # 查询execve返回值格式
 $ sudo bpftrace -lv tracepoint:syscalls:sys_exit_execve
 ```
