@@ -20,6 +20,7 @@ type cdata struct {
 	SourcePort uint32
 	DstPort    uint32
 	Family     uint32
+	State      uint32
 }
 
 func resizeMap(module *bpf.Module, name string, size uint32) error {
@@ -55,11 +56,11 @@ func main() {
 	if err := bpfModule.BPFLoadObject(); err != nil {
 		panic(err)
 	}
-	prog, err := bpfModule.GetProgram("kb_tcp_accept")
+	prog, err := bpfModule.GetProgram("kb_tcp_state")
 	if err != nil {
 		panic(err)
 	}
-	if _, err := prog.AttachKretprobe("inet_csk_accept"); err != nil {
+	if _, err := prog.AttachKprobe("tcp_set_state"); err != nil {
 		panic(err)
 	}
 
@@ -90,7 +91,7 @@ func main() {
 				log.Println(err)
 				continue
 			}
-			log.Printf("Source: [%s:%d] Dst: [%s:%d] -- Family: %d \n", inet_ntoa(cd.SourceIP), cd.SourcePort, inet_ntoa(cd.DstIP), cd.DstPort, cd.Family)
+			log.Printf("Source: [%s:%d] Dst: [%s:%d] State: [%d] -- Family: %d \n", inet_ntoa(cd.SourceIP), cd.SourcePort, inet_ntoa(cd.DstIP), cd.DstPort, cd.State, cd.Family)
 		case <-c:
 			log.Fatal("program interrupted")
 			break
@@ -100,10 +101,14 @@ func main() {
 
 func inet_ntoa(ipnr uint32) string {
 	var bytes [4]byte
-	bytes[0] = byte(ipnr & 0xFF)
-	bytes[1] = byte((ipnr >> 8) & 0xFF)
-	bytes[2] = byte((ipnr >> 16) & 0xFF)
-	bytes[3] = byte((ipnr >> 24) & 0xFF)
+	// bytes[0] = byte(ipnr & 0xFF)
+	bytes[0] = byte(ipnr)
+	// bytes[1] = byte((ipnr >> 8) & 0xFF)
+	bytes[1] = byte(ipnr >> 8)
+	// bytes[2] = byte((ipnr >> 16) & 0xFF)
+	bytes[2] = byte(ipnr >> 16)
+	// bytes[3] = byte((ipnr >> 24) & 0xFF)
+	bytes[3] = byte(ipnr >> 24)
 
 	return net.IPv4(bytes[0], bytes[1], bytes[2], bytes[3]).String()
 }

@@ -1,4 +1,4 @@
-module learn-libbpfgo/8-tcpaccept
+module learn-libbpfgo/8-tcpstate
 
 go 1.18
 
