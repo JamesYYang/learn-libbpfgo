@@ -98,12 +98,18 @@ func main() {
 	}
 }
 
-func inet_ntoa(ipnr uint32) string {
-	var bytes [4]byte
-	bytes[0] = byte(ipnr & 0xFF)
-	bytes[1] = byte((ipnr >> 8) & 0xFF)
-	bytes[2] = byte((ipnr >> 16) & 0xFF)
-	bytes[3] = byte((ipnr >> 24) & 0xFF)
+// func inet_ntoa(ipnr uint32) string {
+// 	var bytes [4]byte
+// 	bytes[0] = byte(ipnr & 0xFF)
+// 	bytes[1] = byte((ipnr >> 8) & 0xFF)
+// 	bytes[2] = byte((ipnr >> 16) & 0xFF)
+// 	bytes[3] = byte((ipnr >> 24) & 0xFF)
 
-	return net.IPv4(bytes[0], bytes[1], bytes[2], bytes[3]).String()
+// 	return net.IPv4(bytes[0], bytes[1], bytes[2], bytes[3]).String()
+// }
+
+func inet_ntoa(in uint32) string {
+	ip := make(net.IP, net.IPv4len)
+	binary.LittleEndian.PutUint32(ip, in)
+	return ip.String()
 }
